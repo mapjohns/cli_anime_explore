@@ -1,6 +1,6 @@
 require 'httparty'
 require 'pry'
-require "./lib/anime_explore.rb"
+require "./lib/anime_explore/anime.rb"
 # class AnimeExplore::Scraper
 #     attr_accessor :year
 #     @@all = []
