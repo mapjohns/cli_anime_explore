@@ -8,17 +8,17 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Matthew"]
   spec.email         = ["mattj20@gmail.com"]
 
-  spec.summary       = "This is a summary"
-  spec.description   = "This is a description for the anime explor gemspec file"
-  spec.homepage      = "http://www.bob.com"
+  spec.summary       = "Anime year explorer"
+  spec.description   = "This gem will pull data on Anime released in a specified year, it will show the top anime from that year."
+  spec.homepage      = "https://github.com/mapjohns/cli_anime_explore"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
 
-  spec.metadata["allowed_push_host"] = "http://www.bob.com"
+  spec.metadata["allowed_push_host"] = "https://github.com/mapjohns/cli_anime_explore"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "http://www.bob.com"
-  spec.metadata["changelog_uri"] = "http://www.bob.com"
+  spec.metadata["source_code_uri"] = "https://github.com/mapjohns/cli_anime_explore"
+  spec.metadata["changelog_uri"] = "https://github.com/mapjohns/cli_anime_explore"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
