@@ -1,65 +1,74 @@
-require 'pry'
-require "./lib/anime_explore/scraper.rb"
-require "./lib/anime_explore/anime.rb"
-class CLI
+class AnimeExplore::CLI
     attr_accessor :animesort
     def call
         puts "Welcome to the Anime Explore App!"
         puts "Here you can learn more about which anime is popular as well as some neat data!"
         ask_date
     end
+
     def ask_date
-        puts "To begin, please enter a year that you'd like to learn more about"
+        puts "Please enter a year that you'd like to learn more about"
         input = gets.chomp().to_i
-        until input.between?(1905,Time.now.year)
+        until input.between?(1907,Time.now.year)
             puts "Please enter a valid year"
             input = gets.chomp().to_i
         end
-        Scraper.new(input)
+        AnimeExplore::Scraper.new(input)
         anime_count(input)
     end
 
     def anime_count(input)
-        puts "In #{input}, #{Anime.all.length} anime have been released!"
-        topyear
+        puts "-------------------------------------------"
+        puts "In #{input}, #{AnimeExplore::Anime.all.length} anime have been released!"
+        if AnimeExplore::Anime.all.length > 0 then topyear else ask_date end
     end
 
     def topyear
-        @animesort = Anime.all.sort_by {|pop| pop.popularityrank}
-        #Top 5 anime
+        @animesort = AnimeExplore::Anime.all.sort_by {|pop| pop.popularityrank}
+        puts "-------------------------------------------"
         puts "Top anime from this year"
         counter = 0
         while counter < 5
             puts "#{counter+1}. #{@animesort[counter].name}"
+            break if counter+1 == @animesort.size
             counter += 1
         end
-        puts "If you'd like to learn more about one of the anime here, please enter a number from the list"
-        inputnumber = gets.chomp().to_i
-        anime_info(inputnumber-1)
+        puts "-------------------------------------------"
+        puts "To learn more about one of the anime here, please enter a number from the list"
+        input = gets.chomp().to_i
+        until input.between?(1,counter)
+            puts "Please enter a valid number from 1 to #{counter}"
+            input = gets.chomp().to_i
+        end
+        anime_info(input-1)
     end
 
     def anime_info(listnumber)
-        puts @animesort[listnumber].name
-        puts @animesort[listnumber].desc
-        puts @animesort[listnumber].popularityrank
+        puts "-------------------------------------------"
+        puts "Name:        #{@animesort[listnumber].name}"
+        puts "Description: #{@animesort[listnumber].desc}"
+        puts "Episodes:    #{@animesort[listnumber].episodecount}"
+        puts "Status:      #{@animesort[listnumber].status}"
+        puts "Start Date:  #{@animesort[listnumber].startDate}"
+        puts "End Date:    #{@animesort[listnumber].startDate}"
+        puts "-------------------------------------------"
+        puts "Would you like to see information on another Anime from that year? (y/n)"
+        input = gets.chomp().downcase
+        if input == "y"
+            topyear
+        else
+            puts "Would you like to see information on another year? (y/n)"
+            input = gets.chomp().downcase
+            if input == "y"
+                AnimeExplore::Anime.destroy
+                ask_date
+            else
+                puts "Thank you, have a great day!"
+                exit
+            end
+        end
     end
 end
-#find/detect
 
- # @animesort[0].name   
-# collect and remove duplicates
-# 1. Asks for year -> Length
-
-#If yes on another Year, destroy data in Anime, if no exit program
-# Anime.all.sort_by {|pop| pop.popularityrank}
-        # 3,2,1
-        # 
-
-#binding.pry
-
-CLI.new().call
-binding.pry
-
-
-# Remove duplicates
-# 
+# CLI.new().call
+# binding.pry
