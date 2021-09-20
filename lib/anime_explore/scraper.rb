@@ -1,8 +1,4 @@
-require 'httparty'
-require 'pry'
-require "./lib/anime_explore/anime.rb"
-#require "./lib/anime_explore/cli.rb"
-class Scraper
+class AnimeExplore::Scraper
     attr_reader :year
     @@all = []
     def initialize(year)
@@ -15,22 +11,17 @@ class Scraper
     end
 
     def parse
+        puts "Please give some time for the data to load"
         response = HTTParty.get("https://kitsu.io/api/edge/anime?filter[year]=#{@year}")
+        response['data'].each do |anime|
+            AnimeExplore::Anime.new(anime["attributes"]["canonicalTitle"],anime["attributes"]["description"],@year, anime["attributes"]["popularityRank"],anime["attributes"]["episodeCount"],anime["attributes"]["status"],anime["attributes"]["startDate"],anime["attributes"]["endDate"])
+        end
         while response["links"]['next']
-            puts response["links"]['next']
             response = HTTParty.get(response["links"]['next'])
             response['data'].each do |anime|
-                Anime.new(anime["attributes"]["canonicalTitle"],anime["attributes"]["description"],@year, anime["attributes"]["popularityRank"])
+                AnimeExplore::Anime.new(anime["attributes"]["canonicalTitle"],anime["attributes"]["description"],@year, anime["attributes"]["popularityRank"],anime["attributes"]["episodeCount"],anime["attributes"]["status"],anime["attributes"]["startDate"],anime["attributes"]["endDate"])
             end
         end
-        list = ["first"]
-        list.each do |keyword|
-            response = HTTParty.get(response["links"][keyword])
-            response['data'].each do |anime|
-                Anime.new(anime["attributes"]["canonicalTitle"],anime["attributes"]["description"],@year, anime["attributes"]["popularityRank"])
-            end
-        end
-        puts "Huge success"
     end
 end
 #Scraper.new(2021)
